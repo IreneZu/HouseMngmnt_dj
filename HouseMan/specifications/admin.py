@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Address, Building
+from .models import Address, Building, ExpenseItem, Expenses
 
 
 # Register your models here.
@@ -17,3 +17,15 @@ class BuildingAdmin(admin.ModelAdmin):
     list_filter = ('number_of_floors', 'number_of_entrances', 'number_of_elevators', 'number_of_residents')
     list_per_page = 30
 
+@admin.register(ExpenseItem)
+class ExpItemAdmin(admin.ModelAdmin):
+    list_display = ('sort_num', 'title')
+    search_fields = ('title',)
+    list_per_page = 40
+
+@admin.register(Expenses)
+class ExpensesAdmin(admin.ModelAdmin):
+    list_display = ('building', 'item', 'summ', 'type')
+    search_fields = ('building', 'item',)
+    list_filter = ('building', 'item',)
+    list_per_page = 40

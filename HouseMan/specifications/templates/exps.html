@@ -1,0 +1,20 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <ol>
+        {% for form in formset %}
+            <li>{{ form.as_table }}</li>
+            <br>
+            <br>
+        {% endfor %}
+        </ol>
+
+        <h3>{{summa}}</h3>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+{% endblock %}
