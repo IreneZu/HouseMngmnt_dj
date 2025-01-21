@@ -1,0 +1,31 @@
+{% extends "menu.html" %}
+
+{% block content %}
+    <table>
+        {% for i in buildings %}
+            <tr>
+                <td>
+                    <h5 style="margin-left:40px;">{{ i.title }}</h5>
+                </td>
+                <td>
+                    <a href="https://maps.google.ru/?q={{ i.title }}">
+                          (посмотреть на карте)
+                    </a>
+                </td>
+                <td> <pre>   </pre></td>
+                <td>
+                    <a href="/building/building_id?building_id={{ i.id }}">
+                           Характеристики МКД
+                    </a>
+                </td>
+                <td> <pre>   </pre></td>
+                <td>
+                    <a href="/expenses/build_id?build_id={{ i.id }}">
+                           Плановые расходы
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

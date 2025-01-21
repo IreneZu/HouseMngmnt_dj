@@ -3,16 +3,16 @@
 {% block content %}
     <table>
         {% for i in buildings %}
-            <tr>
+            <h4><tr>
                 <td>
-                    <h3>{{ i.title }}</h3>
+                    {{ i.title }}
                 </td>
                 <td>
                     <a href="https://maps.google.ru/?q={{ i.title }}">
                           (посмотреть на карте)
                     </a>
                 </td>
-                <td> <pre>   </pre></td>
+                <td> <pre>   </pre> </td>
                 <td>
                     <a href="{% url 'building_spec' i.id %}">
                            Характеристики МКД
@@ -20,12 +20,38 @@
                 </td>
                 <td> <pre>   </pre></td>
                 <td>
-                    <a href="{% url 'building_exp' i.id %}">
+                    <a href="{% url 'building_exp_view' i.id %}">
                            Плановые расходы
                     </a>
                 </td>
-            </tr>
+            </tr></h4>
         {% endfor %}
     </table>
+    <br>
+
+    {% if paginator.num_pages > 1 %}
+        <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                {% if  page_obj.previous_page_number != 1 %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                {% endif %}
+
+            {% endif %}
+
+            <span class="current_page">
+                Страница {{ page_obj.number }} из {{ paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                {% if  page_obj.next_page_number != paginator.num_pages %}
+                    <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                {% endif %}
+                <a href="?page={{ paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+        </div>
+    {% endif %}
 {% endblock %}
 

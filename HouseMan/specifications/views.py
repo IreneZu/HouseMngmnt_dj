@@ -5,15 +5,15 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
-from .models import Address, Building, ExpenseItem, Expenses
+from .models import Building, ExpenseItem, Expenses
 from .forms import BuildExpFormSet
 
 
 def platform(request):
     title = 'Main'
     header = 'Управляющая организация ООО "Ромашка"'
-    cont  = 'По всем вопросам просьба обращаться по адресу г. Москва, 3-я ул.Строителей, д.1'
-#    page_number = request.GET.get('page')
+    cont = 'По всем вопросам просьба обращаться по адресу г. Москва, 3-я ул.Строителей, д.1'
+    #    page_number = request.GET.get('page')
     context = {
         'title': title,
         'header': header,
@@ -21,24 +21,31 @@ def platform(request):
     }
     return render(request, 'main.html', context)
 
-class building_view(TemplateView):
+
+#class building_view(TemplateView):
+class building_view(ListView):
+
     template_name = 'buildings.html'
+    model = Building
     title = 'Buildings'
     header = 'Многоквартирные дома в управлении ООО "Ромашка"'
+    paginate_by = 9
 
     buildings = Building.objects.values()
     for item in buildings:
-        item['adr_for_map'] = item['title'].replace(' ', '+')+ ',+Moscow'
+        item['adr_for_map'] = item['title'].replace(' ', '+') + ',+Moscow'
 
+    context_object_name = 'buildings'
     extra_context = {
         'title': title,
         'header': header,
-        'buildings': buildings,
+#        'buildings': buildings,
     }
+
 
 def building_spec(request, building_id):
     building = Building.objects.get(id=building_id)
-    header = "Характеристики МКД:   " + building.title
+    header = f"Характеристики МКД :  {building.title}"
 
     context = {
         'title': 'specification',
@@ -47,21 +54,20 @@ def building_spec(request, building_id):
     }
     return render(request, 'building_spec.html', context)
 
+
 def items_list(build_id):
     items = ExpenseItem.objects.order_by('sort_num').values()
 
     initial = []
 
     for item in items:
-        building_exp = Expenses.objects.filter(building_id=build_id, item_id = item['id']).values()
+        building_exp = Expenses.objects.filter(building_id=build_id, item_id=item['id']).values()
         if building_exp.count() == 1:
             init_values = dict(building_exp[0])
             init_values['item'] = item['title']
             initial.append(init_values)
-#            print(building_exp[0])
         else:
-#            initial.append({'building_id':build_id,'item_id' : item['id']})
-            initial.append({'building_id':build_id,'item' : item['title']})
+            initial.append({'building_id': build_id, 'item': item['title']})
 
     return initial
 
@@ -69,7 +75,24 @@ def items_list(build_id):
 def building_exp_view(request, building_id):
     context = {}
     list_init = items_list(building_id)
-    formset = BuildExpFormSet(request.POST or None, initial= list_init)#Expenses.objects.all().values() )
+    formset = BuildExpFormSet(request.POST or None, initial=list_init)  #Expenses.objects.all().values() )
+
+    summa = 0
+    if Expenses.objects.filter(building_id=building_id).count() > 0:
+        summa = float(list(Expenses.objects.filter(building_id=building_id).aggregate(Sum('summ')).values())[0])
+    context['expenses'] = list_init
+    context['building_id'] = building_id
+
+    context['header'] = "Плановые расходы на 2025 г.:  " + Building.objects.get(id=building_id).title
+    context['summa'] = f'Всего расходов по дому:  {summa} руб.'
+
+    return render(request, 'exps_view.html', context)
+
+
+def building_exp_edit(request, building_id):
+    context = {}
+    list_init = items_list(building_id)
+    formset = BuildExpFormSet(request.POST or None, initial=list_init)  #Expenses.objects.all().values() )
 
     if request.method == 'POST':
 
@@ -100,13 +123,14 @@ def building_exp_view(request, building_id):
 
                 building_exp.save()
 
-#           return HttpResponseRedirect(reverse('buildings'))
+    #           return HttpResponseRedirect(reverse('buildings'))
     summa = 0
     if Expenses.objects.filter(building_id=building_id).count() > 0:
         summa = float(list(Expenses.objects.filter(building_id=building_id).aggregate(Sum('summ')).values())[0])
-    context['formset']= formset
-    context['header']= "Плановые расходы на 2025 г.:  "+Building.objects.get(id=building_id).title
-    context['summa']= f'Всего расходов по дому:  {summa} руб.'
+    context['formset'] = formset
+
+    context['header'] = "Плановые расходы на 2025 г.:  " + Building.objects.get(id=building_id).title
+    context['summa'] = f'Всего расходов по дому:  {summa} руб.'
 
     return render(request, 'exps.html', context)
 
@@ -120,4 +144,19 @@ class items_view(ListView):
         'header': 'Статьи затрат на содержание и текущий ремонт МКД',
     }
 
+import datetime
 
+def test():
+   t1 = datetime.datetime.now()
+   q = Expenses.objects.all()
+   tsum = 0
+   for i in range(1, 501):
+       u = q.get(id = i + 1)
+       tsum += u.summ
+   t2 = datetime.datetime.now()
+   print(f'tsum = {tsum}')
+   print("get object by key: django req/seq:",500/(t2-t1).total_seconds(),'req time (ms):',(t2-t1).total_seconds()*1000/500)
+
+test()
+# get object by key: django req/seq: 2402.887309390964 req time (ms): 0.416166
+#                                   2358.30145695864 req time (ms): 0.424034

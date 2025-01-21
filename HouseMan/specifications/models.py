@@ -1,8 +1,9 @@
 from django.db import models
 
-# Create your models here.
 
-class Address(models.Model):
+# Create your models here.
+'''
+class Address(models.Model):  # этот класс пока не используется
     title = models.CharField(unique=True, max_length=70)
     street = models.CharField(max_length=50)
     building_num = models.CharField(max_length=7)
@@ -13,6 +14,7 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = "Address"
+'''
 
 class Building(models.Model):
     title = models.CharField(max_length=200)
@@ -20,7 +22,7 @@ class Building(models.Model):
     def __str__(self):
         return self.title
 
-    address = models.ForeignKey(Address, on_delete=models.PROTECT, blank=True)
+#    address = models.ForeignKey(Address, on_delete=models.PROTECT, blank=True)
     number_of_floors = models.CharField(max_length=10, blank=True)
     number_of_entrances = models.IntegerField(blank=True)
     number_of_elevators = models.IntegerField(blank=True)
@@ -28,19 +30,6 @@ class Building(models.Model):
     number_of_residents = models.IntegerField(blank=True)
     cleaning_area = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     residential_area = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-
-
-
-class Unit(models.Model):
-    title = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.title
-
-#        class Meta:
-#            managed = False
-#            db_table = 'specifications_unit'
-#            db_table_comment = 'Units of measurement'
 
 
 class ExpenseItem(models.Model):
@@ -54,11 +43,13 @@ class ExpenseItem(models.Model):
     class Meta:
         ordering = ["sort_num"]
 
+
 class Expenses(models.Model):
-    building = models.ForeignKey(Building, on_delete=models.CASCADE, related_name='expenses' )
+    building = models.ForeignKey(Building, on_delete=models.CASCADE, related_name='expenses')
     item = models.ForeignKey(ExpenseItem, on_delete=models.PROTECT, related_name='building_expenses')
-    summ = models.DecimalField(max_digits=12, decimal_places=2, default = 0.0)
+    summ = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     type = models.CharField(max_length=5, default='месяц')
+
     def __str__(self):
         return f'{self.building} _ {self.item}: {self.summ} руб. в {self.type}'
 

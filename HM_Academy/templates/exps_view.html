@@ -1,0 +1,18 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+    <table>
+        {% for i in expenses %}
+        <tr>
+            <td><pre>   </pre></td><td><h6><li>{{ i.title }}</li></h6></td>
+            <td><pre>   </pre></td><td><h5 align="right">{{ i.summ }}</h5></td>
+            <td><pre>   </pre></td><td><h6> руб. в {{i.type}}  </h6></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+
+
+    <h3 style="margin-left:250px;"><pre> Всего расходов по дому:    {{summa}}  руб.</pre></h3>
+
+{% endblock %}

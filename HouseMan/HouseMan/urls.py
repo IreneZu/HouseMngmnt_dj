@@ -20,7 +20,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-from specifications.views import platform, items_view, building_view, building_spec, building_exp_view
+from specifications.views import (platform, items_view, building_view
+, building_spec, building_exp_view, building_exp_edit)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,7 @@ urlpatterns = [
 
     path('items', items_view.as_view()),
 
-    path('<int:building_id>/', building_exp_view, name='building_exp'),
+    path('view_<int:building_id>/', building_exp_view, name='building_exp_view'),
+    path('edit_<int:building_id>/', building_exp_edit, name='building_exp_edit'),
 
 ]

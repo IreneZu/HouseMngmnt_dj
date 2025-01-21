@@ -1,0 +1,20 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+    <table>
+        {% for i in expenses %}
+        <tr>
+            <td><pre>   </pre></td><td><h4><li>{{ i.item }}</li></h4></td>
+            <td><pre>   </pre></td><td><h4>{{ i.summ }}</h4></td>
+            <td><pre>   </pre></td><td><h5> руб. в {{i.type}}  </h5></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3 style="margin-left:200px;"> {{summa}} </h3>
+    <a target="_blank"
+        class="btn btn-info pull-right"
+        href="{% url 'building_exp_edit' building_id %}">
+        <h5>Вход для редактирования </h5>
+    </a>
+{% endblock %}

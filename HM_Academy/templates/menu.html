@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> {% block title %} {{title}} {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+    <nav>
+        {% block pagename %}
+            <h1 align="center">{{ header }}</h1>
+        {% endblock %}
+    </nav>
+    </header>
+    <nav class="navar">
+        {% block menu %}
+            <hr>
+            <a href="/"><h3 style="margin-left:20px;">Главная страница</h3></a>
+            <a href="/building"><h3 style="margin-left:20px;">Перечень многоквартирных домов (МКД)</h3></a>
+            <a href=/item><h3 style="margin-left:20px;">Статьи общедомовых расходов</h3></a>
+            <hr>
+            <br>
+        {% endblock %}
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

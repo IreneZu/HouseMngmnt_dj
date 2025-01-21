@@ -1,0 +1,60 @@
+{% extends "menu.html" %}
+
+{% block content %}
+    <table>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Число этажей</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td><h4>{{ building.number_of_floors }}</h4></td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Количество подъездов</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td><h4>{{ building.number_of_entrances }}</h4></td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Количество лифтов</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td>
+                <h4>{{ building.number_of_elevators }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Количество мусоропроводов</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td>
+                <h4>{{ building.number_of_chutes }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Количество проживающих</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td>
+                <h4>{{ building.number_of_residents }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Уборочная площадь, кв.м</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td>
+                <h4>{{ building.cleaning_area }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td> <pre>   </pre></td>
+            <td><h4><li>Площадь жилых помещений, кв.м</li></h4></td>
+            <td> <pre> -  </pre></td>
+            <td>
+                <h4>{{ building.residential_area }}</h4></h4>
+            </td>
+
+        </tr>
+    </table>
+{% endblock %}
+

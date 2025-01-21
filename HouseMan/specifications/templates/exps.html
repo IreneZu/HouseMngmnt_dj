@@ -6,15 +6,13 @@
         {{ formset.management_form }}
         <ol>
         {% for form in formset %}
-            <li>{{ form.as_table }}</li>
-            <br>
-            <br>
+            <h5><li>{{ form.as_table }}</li></h5>
         {% endfor %}
         </ol>
 
-        <h3>{{summa}}</h3>
+        <h3 style="margin-left:200px;"> {{summa}} </h3>
 
-        <button type="submit">Сохранить</button>
+        <button type="submit" style="margin-left:300px;">Сохранить</button>
     </form>
 
 {% endblock %}

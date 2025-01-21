@@ -1,15 +1,16 @@
 from django.contrib import admin
-from .models import Address, Building, ExpenseItem, Expenses
+from .models import Building, ExpenseItem, Expenses
 
 
 # Register your models here.
+'''
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('street',)
     list_per_page = 30
-
+'''
 @admin.register(Building)
 class BuildingAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')

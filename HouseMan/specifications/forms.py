@@ -3,24 +3,32 @@ from django.forms import formset_factory
 from .models import Expenses, ExpenseItem
 
 class BuildExpForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BuildExpForm, self).__init__(*args, **kwargs)
+        self.fields['item'].widget.attrs['readonly'] = True
+
     item = forms.ModelChoiceField(queryset=ExpenseItem.objects.all(),
-                                    to_field_name='title',
-                                    label = '',
-                                    empty_label="Статья затрат")
+                                  to_field_name='title',
+                                  label = '',
+                                  empty_label="Статья затрат",
+                                  )
+
     class Meta:
         model = Expenses
-#        fields = ['building', 'item', 'type', 'summ']
-        exclude = ["building"]
+        fields = ['item', 'summ', 'type']
+#        exclude = ["building"]
 #        summ = forms.DecimalField()
-        labels = {'item': '', 'summ': '  затраты', 'type': ' руб. в '}
+        labels = {'summ': '  ', 'type': ' руб. в '}
+
         TYPE_CHOICES = (
             ('', 'Период (год/месяц)'),
             ('месяц', 'месяц'),  # First one is the value of select option and second is the displayed value in option
             ('год', 'год'),
         )
         widgets = {
-            'type': forms.Select(choices=TYPE_CHOICES, attrs={'class': 'form-control'}),
+            'type': forms.Select(choices=TYPE_CHOICES, attrs={'class': 'form-control'})
         }
 
 BuildExpFormSet = formset_factory(BuildExpForm, extra=0)
+
 
